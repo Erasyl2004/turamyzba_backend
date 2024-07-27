@@ -3,7 +3,7 @@ from typing import List
 from sqlalchemy.orm import Session
 from app.models import tables
 from app.models.database import get_db
-from app.models.schemas import RoommatesCreate, Roommates
+from app.models.schemas import RoommatesCreate, Roommates,RoomCreate, Room
 from app.ai_controllers.preferences import get_preference
 from app.controllers.room_controllers import get_room_id,find_roommates,delete_roommate
 
@@ -43,3 +43,13 @@ async def remove_roommate(user_id: int, db: Session = Depends(get_db)):
     if "error" in result:
         raise HTTPException(status_code=404, detail=result["error"])
     return result
+
+@router.post("/add_room", response_model=Room)
+async def create_room(room: RoomCreate, db: Session = Depends(get_db)):
+    db_room = tables.Room(
+        room_preferences=room.room_preferences
+    )
+    db.add(db_room)
+    db.commit()
+    db.refresh(db_room)
+    return db_room

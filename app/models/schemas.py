@@ -20,3 +20,15 @@ class Roommates(RoommatesBase):
 
     class Config:
         orm_mode = True
+
+class RoomBase(BaseModel):
+    room_preferences: str
+
+class RoomCreate(RoomBase):
+    pass
+
+class Room(RoomBase):
+    room_id: int
+
+    class Config:
+        orm_mode = True
