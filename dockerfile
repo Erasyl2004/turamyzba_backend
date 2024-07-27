@@ -1,14 +1,12 @@
+
 FROM python:3.9
 
-WORKDIR /code
+WORKDIR /app
 
-COPY ./requirements.txt /code/requirements.txt
-RUN pip install --no-cache-dir --upgrade -r /code/requirements.txt
+COPY requirements.txt .
 
-COPY ./app /code/app
+RUN pip install --no-cache-dir -r requirements.txt
 
-COPY ./wait-for-it.sh /code/wait-for-it.sh
+COPY . .
 
-COPY ./.env /code/.env
-
-RUN chmod +x /code/wait-for-it.sh
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
